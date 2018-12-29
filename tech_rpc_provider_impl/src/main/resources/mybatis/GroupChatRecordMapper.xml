@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.GroupChatRecordMapper">
+
+    <insert id="addGroupChatRecord" parameterType="GroupChatRecord">
+        INSERT INTO group_chat_record(group_id,user_id,nick_name,head_pic,chat_content,chat_image,chat_time)
+        VALUES (#{groupId},#{userId},#{nickName},#{headPic},#{chatContent},#{chatImage},#{chatTime})
+   </insert>
+
+    <select id="findGroupChatRecordPage" parameterType="Map" resultType="GroupChatRecord" >
+        select id,group_id,user_id,nick_name,head_pic,chat_content,chat_image,chat_time
+        from group_chat_record
+        where group_id = #{groupId}
+        group by chat_time desc
+        limit #{index},#{count}
+    </select>
+
+    <delete id="deleteGroupChatRecord" parameterType="int">
+        delete from group_chat_record
+        where group_id = #{groupId}
+    </delete>
+
+</mapper>

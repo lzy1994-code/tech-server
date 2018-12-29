@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.SysNoticeMapper">
+
+    <insert id="addSysNotice" parameterType="SysNotice">
+        INSERT INTO sys_notice(receive_uid,content)
+        VALUES (#{receiveUid},#{content})
+   </insert>
+
+    <insert id="batchAddSysNotice" parameterType="List">
+        INSERT INTO sys_notice(receive_uid,content)
+        VALUES
+        <foreach collection="list" item="temp" separator =",">
+            (#{temp.receiveUid},#{temp.content})
+        </foreach>
+    </insert>
+
+    <select id="findSysNoticeList" parameterType="Map" resultType="SysNotice">
+        select id,receive_uid,content,create_time
+        from sys_notice
+        where receive_uid = #{userId}
+        ORDER BY create_time DESC
+        limit #{index},#{count}
+    </select>
+
+</mapper>

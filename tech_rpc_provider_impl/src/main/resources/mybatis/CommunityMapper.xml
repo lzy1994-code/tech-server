@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.CommunityMapper">
+
+    <select id="findCommunityList" resultType="CommunityVo" parameterType="int">
+      select t1.id,t1.user_id,t1.content,t1.file,t1.publish_time,t2.nick_name,t2.head_pic,t2.signature,t3.community_id,t3.praise,t3.comment
+      from community t1,user t2,community_count t3
+      where t1.user_id = t2.id and t1.id = t3.community_id
+      ORDER BY publish_time DESC limit #{index},#{count}
+    </select>
+
+    <insert id="releasePost" parameterType="Community">
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+      insert into community (user_id,content,file,publish_time) VALUES
+       (#{userId},#{content},#{file},now())
+    </insert>
+
+    <delete id="deletePost" parameterType="Map">
+        delete from community where id IN
+        <foreach collection="ids" index="index" item="item" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="whetherMyPost" parameterType="int" resultType="int">
+       select count(1) from community where user_id = #{userId} and id = #{id}
+    </select>
+
+    <select id="findMyPostById" resultType="UserPostVo" parameterType="int">
+      select t1.id,t1.user_id,t1.content,t1.file,t1.publish_time,t2.nick_name,t2.head_pic,t2.signature,t3.community_id,t3.praise,t3.comment
+      from community t1,user t2,community_count t3 where t1.user_id = #{userId} and t1.user_id = t2.id and t1.id = t3.community_id
+      ORDER BY publish_time DESC limit #{index},#{count}
+    </select>
+
+    <select id="findUserPostById" parameterType="int" resultType="CommunityUserPostVo">
+      select t1.id,t1.content,t1.file,t3.praise,t3.comment
+      from community t1,community_count t3
+      where #{fromUid} = t1.user_id and t1.id = t3.community_id
+      ORDER BY publish_time DESC limit #{index},#{count}
+    </select>
+
+
+</mapper>

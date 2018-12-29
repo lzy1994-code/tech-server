@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.CommunityCountMapper">
+
+     <update id="updateCommunityPraiseNum" parameterType="int">
+          update community_count set praise= praise + #{praise} WHERE  community_id=#{communityId};
+     </update>
+
+     <update id="updateCommunityCommentNum" parameterType="int">
+        update community_count set comment= comment + #{comment} WHERE  community_id=#{communityId};
+     </update>
+     <insert id="addCommunityCount" parameterType="int">
+         insert into community_count (community_id,praise,comment) values (#{communityId},0,0)
+     </insert>
+
+</mapper>

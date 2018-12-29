@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.CommunityGreatMapper">
+
+     <select id="whetherCommunityGreat" resultType="int" parameterType="int">
+     select count(1) from community_great where user_id = #{userId} and community_id = #{communityId}
+     </select>
+     <insert id="addCommunityGreat" parameterType="int">
+     insert into community_great (user_id,community_id) VALUES (#{userId},#{communityId})
+  </insert>
+     <delete id="cancelCommunityGreat">
+         delete from community_great where user_id = #{userId} and community_id = #{communityId}
+     </delete>
+
+</mapper>

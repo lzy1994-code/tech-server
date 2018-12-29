@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.GroupMapper">
+
+    <insert id="addGroup" parameterType="Groups">
+        INSERT INTO groups(hx_group_id,name,image,description,owner_uid,max_count,current_count)
+        VALUES (#{hxGroupId},#{name},#{image},#{description},#{ownerUid},#{maxCount},#{currentCount})
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="modifyGroupName" parameterType="Map">
+        update groups
+        set name = #{groupName}
+        where id = #{id}
+    </update>
+
+    <update id="modifyGroupDescription" parameterType="Map">
+        update groups
+        set description = #{description}
+        where id = #{id}
+    </update>
+
+    <update id="modifyGroupUserNumber" parameterType="Map">
+        update groups
+        set current_count = current_count + #{num}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGroup" parameterType="int">
+        delete from groups where id =#{id}
+    </delete>
+
+    <select id="findGroupsByUserId" parameterType="int" resultType="Groups">
+        select id,hx_group_id,name,image,description,owner_uid,max_count,current_count,create_time
+        from groups
+        where owner_uid = #{userId}
+        order by create_time asc
+    </select>
+
+    <select id="findUserJoinedGroup" parameterType="int" resultType="Groups">
+        select t1.id,t1.hx_group_id,t1.name,t1.image,t1.description,t1.owner_uid,t1.max_count,t1.current_count,t1.create_time
+        from groups t1,group_members t2
+        where t2.user_id = #{userId} and t1.id = t2.group_id
+        order by t2.create_time desc
+    </select>
+
+    <select id="checkGroupName" parameterType="Map" resultType="int">
+        select count(1) from groups
+        where owner_uid = #{userId} and name = #{groupName}
+    </select>
+
+    <select id="getGroupById" parameterType="int" resultType="Groups">
+        select id,hx_group_id,name,image,description,owner_uid,max_count,current_count,create_time
+        from groups
+        where id = #{id}
+    </select>
+
+    <select id="getGroupCurrentCount" parameterType="int" resultType="int">
+        select current_count from groups
+        where id = #{id}
+    </select>
+    <update id="modifyImage" parameterType="Map">
+        UPDATE groups SET image = #{image} WHERE id = #{groupId}
+    </update>
+</mapper>

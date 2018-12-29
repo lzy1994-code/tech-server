@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.InfoPayRecordMapper">
+    <select id="findUserPayList" parameterType="int" resultType="InfoPayRecordVo">
+        select t1.id,t1.title,t1.source,t1.thumbnail,t2.user_id,t2.info_id,t2.create_time from information t1, info_pay_record t2
+        where t1.id = t2.info_id and user_id=#{userId}
+        ORDER BY create_time DESC
+        limit #{index},#{count}
+    </select>
+    
+    <select id="whetherUserPay" resultType="int" parameterType="int">
+        select count(*) from info_pay_record where user_id=#{userId} and info_id=#{id}
+    </select>
+
+    <select id="infoPayTotal" parameterType="int" resultType="int">
+        select count(*) from info_pay_record where info_id=#{infoId}
+    </select>
+
+    <select id="userPayTotal" parameterType="int" resultType="int">
+        select count(*) from info_pay_record where user_id=#{userId}
+    </select>
+
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.GroupNoticeMapper">
+
+    <insert id="addGroupNotice" parameterType="GroupNotice">
+        INSERT INTO group_notice(batch_number,group_id,from_uid,receiver_uid,remark,status,type,notice_time)
+        VALUES (#{batchNumber},#{groupId},#{fromUid},#{receiverUid},#{remark},#{status},#{type},#{noticeTime})
+   </insert>
+
+    <insert id="batchAddGroupNotice" parameterType="List">
+        INSERT INTO group_notice(batch_number,group_id,from_uid,receiver_uid,remark,status,type,notice_time)
+        VALUES
+        <foreach collection="list" item="temp" separator =",">
+            (#{temp.batchNumber},#{temp.groupId},#{temp.fromUid},#{temp.receiverUid},#{temp.remark},#{temp.status},#{temp.type},#{temp.noticeTime})
+        </foreach>
+    </insert>
+
+    <select id="findGroupNoticePageList" parameterType="Map" resultType="GroupNotice">
+        select id,batch_number,group_id,from_uid,receiver_uid,remark,status,type,notice_time,check_time
+        from group_notice
+        where receiver_uid = #{userId}
+        order by notice_time desc
+        limit #{index},#{count}
+    </select>
+
+    <update id="updateBatchStatus" parameterType="Map">
+        update group_notice
+        set status = #{status}
+        where batch_number = #{batchNumber}
+    </update>
+
+    <update id="updateStatus" parameterType="Map">
+        update group_notice
+        set status = #{status}
+        where id = #{noticeId}
+    </update>
+
+    <select id="getGroupNoticeById" parameterType="int" resultType="GroupNotice">
+        select id,batch_number,group_id,from_uid,receiver_uid,remark,status,type,notice_time,check_time
+        from group_notice
+        where id = #{noticeId}
+    </select>
+
+    <delete id="deleteByGroupId" parameterType="int">
+        delete from group_notice where group_id = #{groupId}
+    </delete>
+
+</mapper>

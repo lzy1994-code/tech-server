@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.FocusUserMapper">
+
+    <select id="findFollowUserList" parameterType="int" resultType="FocusUserVo">
+    select t1.user_id,t1.focus_uid,t1.focus_time,t2.nick_name,t2.head_pic,t2.signature from focus_user t1,user t2
+     where t1.focus_uid = t2.id and t1.user_id = #{userId} order by t1.focus_time DESC limit #{index},#{count}
+    </select>
+
+    <select id="whetherFollowUser" parameterType="int" resultType="int">
+        select count(1) from focus_user where user_id = #{userId} and focus_uid=#{focusId}
+    </select>
+
+    <insert id="addFollow" parameterType="int">
+        insert into focus_user (user_id,focus_uid) VALUES (#{userId},#{focusId})
+    </insert>
+
+    <delete id="cancelFollow" parameterType="int">
+       delete from focus_user where user_id = #{userId} and focus_uid=#{focusId}
+    </delete>
+
+    <select id="whetherMutualFollow" parameterType="int" resultType="int">
+        select count(1) from focus_user t1 where t1.user_id = #{userId} and t1.focus_uid =#{focusId}
+        and exists(select * from focus_user t2 where t1.user_id = t2.focus_uid and t1.focus_uid = t2.user_id)
+    </select>
+
+</mapper>

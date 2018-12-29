@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.ChatRecordMapper">
+
+  <insert id="batchAddChatRecord" parameterType="List">
+    INSERT INTO chat_record(user_id,friend_id,head_pic,direction,chat_content,chat_image,chat_time)
+    VALUES
+    <foreach collection="list" item="temp" separator =",">
+      (#{temp.userId},#{temp.friendId},#{temp.headPic},#{temp.direction},#{temp.chatContent},#{temp.chatImage},#{temp.chatTime})
+    </foreach>
+  </insert>
+
+  <select id="findChatRecordPageList" parameterType="Map" resultType="ChatRecord">
+      SELECT id,user_id,friend_id,head_pic,direction,chat_content,chat_image,chat_time FROM chat_record
+      WHERE user_id = #{userId} AND friend_id = #{friend}
+      order by chat_time ASC limit #{index},#{count}
+  </select>
+
+  <select id="findChatHistory" parameterType="Map" resultType="ChatRecord">
+      SELECT id,user_id,friend_id,head_pic,direction,chat_content,chat_image,chat_time FROM chat_record
+      WHERE user_id = #{userId} AND friend_id = #{friend} AND chat_time &gt;= #{time}
+      order by chat_time ASC
+  </select>
+
+  <delete id="deleteChatRecord" parameterType="Map">
+      DELETE FROM chat_record
+      WHERE user_id = #{userId} AND friend_id = #{friend}
+  </delete>
+
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.FriendRelationMapper">
+
+    <insert id="addFriendRelation" parameterType="FriendRelation">
+    INSERT INTO friend_relation(user_id,friend_uid,friend_group_id,remark_name)
+    VALUES (#{userId},#{friendUid},#{friendGroupId},#{remarkName})
+  </insert>
+
+    <select id="findUserFriendRelationList" parameterType="int" resultType="FriendRelation">
+        select id,user_id,friend_uid,friend_group_id,remark_name from friend_relation
+        where user_id = #{userId}
+    </select>
+
+    <delete id="deleteFriendRelation" parameterType="Map">
+          delete from friend_relation
+          where user_id = #{userId} and friend_uid = #{friendUid}
+    </delete>
+
+    <update id="modifyFriendRemark" parameterType="Map">
+        update friend_relation
+        set remark_name = #{remarkName}
+        where user_id = #{userId} and friend_uid = #{friendUid}
+    </update>
+
+    <update id="modifyFriendGroup" parameterType="Map">
+        update friend_relation
+        set friend_group_id = #{groupId}
+        where user_id = #{userId} and friend_uid = #{friendUid}
+    </update>
+
+    <select id="checkMyFriend" parameterType="Map" resultType="int">
+        select count(1) from friend_relation
+        where user_id = #{userId} and friend_uid = #{friendUid}
+    </select>
+
+    <select id="findFriendGroupId" parameterType="Map" resultType="int">
+        select friend_group_id from friend_relation
+        where user_id = #{userId} and friend_uid = #{friendUid}
+    </select>
+
+    <update id="batchTransferFriendGroup" parameterType="Map">
+        update friend_relation
+        set friend_group_id = #{newGroupId}
+        where user_id = #{userId} and friend_group_id = #{oldGroupId}
+    </update>
+
+    <select id="findFriendListByGroupId" parameterType="Map" resultType="FriendListVo">
+        select t1.friend_uid,t1.remark_name,t2.nick_name,t2.head_pic,t2.signature,t2.user_name
+        from friend_relation t1,user t2
+        where t1.friend_group_id = #{groupId} and  t1.friend_uid= t2.id
+    </select>
+
+    <select id="searchFriend" parameterType="Map" resultType="FriendSearchVo">
+        select t2.id as friendUid,t1.remark_name,t2.nick_name,t2.head_pic,t3.name as buddySource,t2.user_name,t2.pwd
+        from friend_relation t1,user t2,friend_group t3
+        where t1.user_id = #{userId} and t1.friend_uid = t2.id
+        and t3.id = t1.friend_group_id
+        and (t1.remark_name like concat(#{searchName},'%') or t2.nick_name like concat(#{searchName},'%'))
+    </select>
+
+</mapper>

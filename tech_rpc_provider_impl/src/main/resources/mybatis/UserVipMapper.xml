@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.UserVipMapper">
+
+    <select id="whetherVipUser" resultType="int" parameterType="int">
+        select count(1) from user_vip where user_id =  #{userId} and now() &lt;expire
+    </select>
+
+    <insert id="addUserVip" parameterType="UserVip">
+        insert into user_vip(user_id,expire)
+        values (#{userId},#{expire})
+    </insert>
+
+    <update id="modifyExpireTime" parameterType="Map">
+        update user_vip
+        set expire = #{expireTime}
+        where user_id = #{userId}
+    </update>
+
+    <select id="getUserVip" parameterType="int" resultType="UserVip">
+        select user_id,expire from user_vip where user_id = #{userId}
+    </select>
+
+</mapper>

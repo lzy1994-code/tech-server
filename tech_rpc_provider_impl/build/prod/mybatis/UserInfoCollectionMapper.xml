@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.UserInfoCollectionMapper">
+    <select id="findAllInfoCollection" resultType="UserInfoCollection" parameterType="int">
+    select t1.id,t1.info_id,t1.create_time,t2.title,t2.thumbnail from user_info_collection t1,information t2
+     where t1.user_id = #{userId} and t1.info_id=t2.id ORDER BY  create_time DESC limit #{index},#{count}
+</select>
+    <insert id="addCollection" parameterType="Map">
+        insert into user_info_collection(user_id,info_id) VALUE (#{userId},#{infoId})
+    </insert>
+    <delete id="cancelCollection" parameterType="Map">
+        delete from user_info_collection where user_id=#{userId} and info_id IN
+        <foreach collection="infoIds" index="index" item="item" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    <select id="whetherCollection" parameterType="int" resultType="int">
+        SELECT count(1) from user_info_collection WHERE user_id=#{userId} and info_id = #{infoId}
+    </select>
+</mapper>

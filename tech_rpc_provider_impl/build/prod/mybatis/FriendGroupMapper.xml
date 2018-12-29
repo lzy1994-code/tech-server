@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.FriendGroupMapper">
+
+  <insert id="addFriendGroup" parameterType="FriendGroup">
+    INSERT INTO friend_group(user_id,name,current_number,customize,black)
+    VALUES (#{userId},#{name},#{currentNumber},#{customize},#{black})
+      <selectKey keyProperty="id" order="AFTER" resultType="int">
+          SELECT LAST_INSERT_ID()
+      </selectKey>
+  </insert>
+
+    <insert id="batchAddFriendGroup" parameterType="List">
+        INSERT INTO friend_group(user_id,name,current_number,customize,black)
+        VALUES
+        <foreach collection="list" item="temp" separator =",">
+            (#{temp.userId},#{temp.name},#{temp.currentNumber},#{temp.customize},#{temp.black})
+        </foreach>
+    </insert>
+
+  <select id="findFriendGroupList" parameterType="int" resultType="FriendGroup">
+      SELECT id,user_id,name,current_number,customize,black FROM friend_group
+      WHERE user_id = #{userId}
+      order by create_time ASC
+  </select>
+
+    <update id="modifyGroupName" parameterType="Map">
+        UPDATE friend_group
+        SET name = #{groupName}
+        where id = #{id}
+    </update>
+
+    <update id="modifyGroupUserNumber" parameterType="Map">
+        UPDATE friend_group
+        SET current_number = current_number + #{num}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGroupById" parameterType="int">
+        delete from friend_group
+        where id = #{id}
+    </delete>
+
+    <select id="findRepeatGroup" parameterType="Map" resultType="int">
+        select count(1) from friend_group
+        where user_id = #{userId} and name = #{groupName}
+    </select>
+
+    <select id="findDefaultFriendGroup" parameterType="int" resultType="int">
+        select id from friend_group
+        where user_id = #{userId} and customize = 1 and black = 1
+    </select>
+
+    <select id="whetherDefaultGroup" parameterType="int" resultType="int">
+        select count(1) from friend_group
+        where id = #{friendGroupId} and customize = 1
+    </select>
+
+</mapper>

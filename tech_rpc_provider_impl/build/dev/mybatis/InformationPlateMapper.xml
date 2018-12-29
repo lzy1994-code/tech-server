@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.InformationPlateMapper">
+    <select id="findPlateNameById" resultType="InformationPlate" parameterType="int">
+    SELECT t1.id, t1.name from information_plate t1 where t1.id
+    in(select t2.plate_id from info_plate_relation t2 where t2.info_id = #{infoId})
+    </select>
+    <select id="findAllInfoPlate" resultType="InformationPlate">
+        select id,name,pic from information_plate
+    </select>
+</mapper>

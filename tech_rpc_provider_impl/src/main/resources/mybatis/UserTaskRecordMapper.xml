@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.UserTaskRecordMapper">
+
+    <insert id="addUserTaskRecord" parameterType="UserTaskRecord">
+        insert into user_task_record(task_id,user_id,task_time)
+        values (#{taskId},#{userId},#{taskTime})
+    </insert>
+
+    <select id="findUserTaskStatus" parameterType="Map" resultType="int" >
+        select count(1) from user_task_record
+        where task_id = #{taskId}
+        and user_id =  #{userId}
+        <if test="nowTime != null">
+            and to_days(task_time) = to_days(#{nowTime});
+        </if>
+    </select>
+
+</mapper>

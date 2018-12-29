@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.UserIntegralRecordMapper">
+    <select id="findUserIntegralRecord" parameterType="int" resultType="UserIntegralRecord">
+    select * from user_integral_record where user_id = #{userId}
+    ORDER BY create_time DESC
+    limit #{index},#{count}
+</select>
+
+    <insert id="addUserDetailIntegral" parameterType="UserIntegralRecord">
+        insert into user_integral_record (user_id,direction,type,balance,detail,remark) values (#{userId},#{direction},#{type},#{balance},#{detail},#{remark})
+    </insert>
+</mapper>

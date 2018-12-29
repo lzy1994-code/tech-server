@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.InformationCountMapper">
+    <update id="updateInfoPraiseNum" parameterType="int">
+        update information_count set praise = praise + #{praise} WHERE  info_id=#{infoId};
+    </update>
+    <update id="updateInfoCollectionNum" parameterType="int">
+        update information_count set collection = collection + #{collection} WHERE  info_id=#{infoId};
+    </update>
+    <update id="updateInfoCommentNum" parameterType="int">
+        update information_count set comment = comment + 1 WHERE  info_id=#{infoId};
+    </update>
+    <update id="updateInfoShareNum" parameterType="int">
+        update information_count set share = share + 1 WHERE  info_id=#{infoId};
+    </update>
+</mapper>

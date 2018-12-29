@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.UserLotteryRecordMapper">
+
+    <insert id="addUserLotteryRecord" parameterType="UserLotteryRecord">
+        insert into user_lottery_record(user_id,prize_id,prize_value,prize_name,status,lottery_time)
+        values (#{userId},#{prizeId},#{prizeValue},#{prizeName},#{status},#{lotteryTime})
+    </insert>
+
+    <select id="findPageList" parameterType="Map" resultType="UserLotteryRecord">
+        select id,user_id,prize_id,prize_value,prize_name,status,lottery_time
+        from user_lottery_record
+        where user_id = #{userId}
+        order by lottery_time desc
+        limit #{index},#{count}
+    </select>
+
+    <select id="getUserLotteryRecord" parameterType="int" resultType="UserLotteryRecord">
+        select id,user_id,prize_id,prize_value,prize_name,status,lottery_time
+        from user_lottery_record
+        where id = #{recordId}
+    </select>
+
+    <update id="updateRecordStatus" parameterType="Map">
+        update user_lottery_record
+        set status = 2
+        where user_id = #{userId} and id = #{recordId} and status = 1
+    </update>
+
+</mapper>

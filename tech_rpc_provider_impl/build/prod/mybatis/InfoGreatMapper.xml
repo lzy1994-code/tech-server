@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.InfoGreatMapper">
+
+    <insert id="addGreatRecord" parameterType="int">
+    INSERT INTO info_great (user_id, info_id) VALUES (#{userId}, #{infoId});
+</insert>
+
+    <select id="whetherInfoGreat" parameterType="int" resultType="int">
+    select count(*) from info_great where user_id=#{userId} and info_id =#{infoId}
+</select>
+
+    <delete id="cancelGreat" parameterType="int">
+        delete from  info_great where user_id=#{userId} and info_id =#{infoId}
+    </delete>
+
+</mapper>

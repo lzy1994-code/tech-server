@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.CommunityCommentMapper">
+
+    <select id="findCommunityCommentList" parameterType="int" resultType="CommunityCommentVo">
+        select user_id,nick_name,content from community_comment where community_id = #{communityId} ORDER BY  comment_time DESC limit #{index},#{count}
+    </select>
+
+    <insert id="addCommunityComment" parameterType="CommunityComment">
+         insert into community_comment (community_id,content,user_id,nick_name) values (#{communityId},#{content},#{userId},#{nickName})
+    </insert>
+
+    <select id="findCommunityUserCommentList" parameterType="int" resultType="CommunityUserCommentVo">
+        select t1.user_id,t1.nick_name,t1.content,t1.comment_time,t2.head_pic from community_comment t1,user t2
+		   where community_id = #{communityId} and t1.user_id = t2.id ORDER BY  comment_time DESC limit #{index},#{count}
+    </select>
+
+</mapper>

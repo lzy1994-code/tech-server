@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.FriendNoticeMapper">
+
+    <insert id="addFriendNotice" parameterType="FriendNotice">
+        INSERT INTO friend_notice(from_uid,receive_uid,remark,status,notice_time)
+        VALUES (#{fromUid},#{receiveUid},#{remark},#{status},#{noticeTime})
+   </insert>
+
+    <select id="findFriendNoticePageList" parameterType="Map" resultType="FriendNotice">
+        select id,from_uid,receive_uid,remark,status,notice_time,check_time from friend_notice
+        where receive_uid = #{userId}
+        order by id desc
+        limit #{index},#{count}
+    </select>
+
+    <update id="updateStatus" parameterType="Map">
+        update friend_notice
+        set status = #{status},check_time = now()
+        where id = #{id}
+    </update>
+
+    <select id="findFriendNoticeById" parameterType="int" resultType="FriendNotice">
+        select id,from_uid,receive_uid,remark,status,notice_time,check_time from friend_notice
+        where id = #{id}
+    </select>
+
+    <select id="findLastFriendNotice" parameterType="int" resultType="FriendNotice">
+        select id,from_uid,receive_uid,remark,status,notice_time,check_time from friend_notice
+        where receive_uid = #{userId}
+        order by create_time desc
+        limit 1
+    </select>
+
+</mapper>

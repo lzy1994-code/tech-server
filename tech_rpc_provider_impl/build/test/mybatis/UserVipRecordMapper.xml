@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.UserVipRecordMapper">
+
+    <insert id="addUserVipRecord" parameterType="UserVipRecord">
+        insert into user_vip_record(user_id,order_id,commodity_id,buy_time,money,status)
+        values (#{userId},#{orderId},#{commodityId},#{buyTime},#{money},#{status})
+    </insert>
+
+    <update id="modifyPayStatus" parameterType="String">
+        update user_vip_record
+        set status = 2,pay_time=now()
+        where order_id = #{orderId}
+    </update>
+
+    <select id="getUserVipRecordByOrderId" parameterType="String" resultType="UserVipRecord">
+        select user_id,order_id,commodity_id,buy_time,money,status
+        from user_vip_record
+        where order_id = #{orderId}
+    </select>
+
+</mapper>

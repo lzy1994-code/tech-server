@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wd.tech.dao.InfoCommentMapper">
+
+    <select id="findAllInfoComment" resultType="InfoCommentVo" parameterType="int">
+    select t1.id,t1.info_id,t1.user_id,t1.content,t1.comment_time,t2.nick_name,t2.head_pic
+    from info_comment t1,user t2 where t2.id=t1.user_id  and  info_id = #{infoId}
+    ORDER BY  comment_time DESC limit #{index},#{count}
+    </select>
+
+    <insert id="addInfoComment" parameterType="InfoComment">
+        <selectKey resultType="int" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    insert into info_comment (info_id,user_id,content)
+    VALUE (#{infoId},#{userId},#{content})
+   </insert>
+
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="
+	   http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="tech-rpc-provider"/>
+
+    <!-- 使用Zookeeper集群注册中心暴露服务地址 -->
+    <dubbo:registry protocol="zookeeper" address="172.17.8.100:2181,172.17.8.100:2182,172.17.8.100:2183"/>
+
+    <!-- 用dubbo协议在20880端口暴露服务，一个项目需要一个端口 -->
+    <dubbo:protocol name="dubbo" port="20883"/>
+
+    <!--
+    timeout 超时配置3秒
+    retries 服务调用失败后重试次数
+    actives 最大调用并发限制，当Consumer对一个服务的并发调用到上限后，新调用会Wait直到超时
+    -->
+    <dubbo:provider timeout="5000" retries="2" actives="200" />
+
+    <!-- Service 提供者 -->
+    <!-- 声明需要暴露的服务接口，interface指定接口，ref指定真正的实现者（SpringBean的id） -->
+     <dubbo:service interface="com.wd.tech.rpc.api.UserRpcService" ref="userRpcService"></dubbo:service>
+    <dubbo:service interface="com.wd.tech.rpc.api.InformationRpcService" ref="informationRpcService"></dubbo:service>
+    <dubbo:service interface="com.wd.tech.rpc.api.GroupRpcService" ref="groupRpcService"></dubbo:service>
+    <dubbo:service interface="com.wd.tech.rpc.api.CommunityRpcService" ref="communityRpcService"></dubbo:service>
+    <dubbo:service interface="com.wd.tech.rpc.api.ChatRpcService" ref="chatRpcService"></dubbo:service>
+    <dubbo:service interface="com.wd.tech.rpc.api.ToolRpcService" ref="techToolRpcService"></dubbo:service>
+    <!-- 关闭所有服务的启动时检查-->
+    <dubbo:consumer check="false" />
+    <!-- 生成远程服务代理，可以和本地bean一样使用personService，init是否饥饿式初始化这个引用 -->
+    <dubbo:reference id="techPayRpcService" interface="com.bw.pay.client.api.TechPayRpcService" init="false" />
+    <dubbo:reference id="weChatRpcService" interface="com.bw.pay.client.api.WeChatRpcService" init="false" />
+
+</beans>
